@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Jours écoulés</string>
+    <string name="widget_name">Compteur de jours</string>
+    <string name="widget_description">Affiche le nombre de jours écoulés depuis une date</string>
+
+    <!-- Widget -->
+    <string name="widget_since">depuis le %1$s</string>
+    <string name="widget_until">jusqu\'au %1$s</string>
+    <string name="widget_not_set">aucune date</string>
+    <string name="widget_tap_to_setup">Touche pour choisir</string>
+    <plurals name="widget_unit_past">
+        <item quantity="one">jour</item>
+        <item quantity="other">jours</item>
+    </plurals>
+    <plurals name="widget_unit_future">
+        <item quantity="one">jour restant</item>
+        <item quantity="other">jours restants</item>
+    </plurals>
+
+    <!-- Écran de réglage -->
+    <string name="config_title">Choisir la date</string>
+    <string name="config_label_title">Nom (facultatif)</string>
+    <string name="config_label_hint">Ex. : Arrêt du tabac, Rencontre…</string>
+    <string name="config_date_title">Date de départ</string>
+    <string name="config_cancel">Annuler</string>
+    <string name="config_save">Valider</string>
+    <string name="preview_today">C\'est aujourd\'hui</string>
+    <plurals name="preview_past">
+        <item quantity="one">%d jour écoulé</item>
+        <item quantity="other">%d jours écoulés</item>
+    </plurals>
+    <plurals name="preview_future">
+        <item quantity="one">Dans %d jour</item>
+        <item quantity="other">Dans %d jours</item>
+    </plurals>
+
+    <!-- Écran principal -->
+    <string name="main_title">Jours écoulés</string>
+    <string name="main_intro">Cette appli fonctionne avec un widget à poser sur ton écran d\'accueil.</string>
+    <string name="main_steps">1. Appuie longuement sur un espace vide de l\'écran d\'accueil.\n2. Choisis « Widgets », puis « Jours écoulés ».\n3. Place le widget, puis choisis la date et un nom.\n\nTu peux en ajouter plusieurs, chacun avec sa propre date. Touche un widget pour modifier sa date.</string>
+    <string name="main_add_widget">Ajouter le widget</string>
+    <string name="pin_not_supported">Ton lanceur ne permet pas l\'ajout direct : passe par l\'écran d\'accueil (appui long → Widgets).</string>
+</resources>

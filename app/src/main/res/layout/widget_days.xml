@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/days_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="Mon compteur"
+        android:textColor="@color/widget_text"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/days_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="128"
+        android:textColor="@color/widget_accent"
+        android:textSize="44sp" />
+
+    <TextView
+        android:id="@+id/days_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="jours"
+        android:textColor="@color/widget_text"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/days_since"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="depuis le 3 juin 2026"
+        android:textColor="@color/widget_text_secondary"
+        android:textSize="11sp" />
+
+</LinearLayout>
