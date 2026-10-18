@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Crochet vertical à gauche du panneau de données. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="1dp"
+        android:gravity="start|fill_vertical">
+        <color android:color="@color/vh_line" />
+    </item>
+    <item
+        android:width="2dp"
+        android:height="9dp"
+        android:gravity="start|top">
+        <color android:color="@color/vh_accent" />
+    </item>
+    <item
+        android:width="5dp"
+        android:height="1dp"
+        android:gravity="start|bottom">
+        <color android:color="@color/vh_line" />
+    </item>
+</layer-list>

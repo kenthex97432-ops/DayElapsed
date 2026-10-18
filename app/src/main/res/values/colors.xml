@@ -12,4 +12,5 @@
     <color name="vh_accent">#D4FF00</color>
     <color name="vh_text">#F4F4F0</color>
     <color name="vh_text_dim">#8A8A92</color>
+    <color name="vh_line">#4A4A52</color>
 </resources>

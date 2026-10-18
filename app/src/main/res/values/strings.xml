@@ -21,7 +21,7 @@
     <!-- Thème Vectorheart -->
     <string name="vh_default_label">Compteur</string>
     <string name="vh_since">DEPUIS %1$s</string>
-    <string name="vh_until">JUSQU\'AU %1$s</string>
+    <string name="vh_until">CIBLE %1$s</string>
 
     <!-- Écran de réglage -->
     <string name="config_title">Choisir la date</string>

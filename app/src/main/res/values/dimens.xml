@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Marge de sécurité : laisse le dessin hors de l'arrondi appliqué par l'écran d'accueil
+         (rayon jusqu'à ~28dp). -->
+    <dimen name="vh_safe_inset">8dp</dimen>
+    <dimen name="vh_gauge_width">44dp</dimen>
+    <dimen name="vh_gauge_height">6dp</dimen>
+</resources>

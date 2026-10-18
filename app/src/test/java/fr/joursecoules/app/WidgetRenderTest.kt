@@ -1,6 +1,8 @@
 package fr.joursecoules.app
 
+import android.graphics.Outline
 import android.view.View
+import android.view.ViewOutlineProvider
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import app.cash.paparazzi.DeviceConfig
@@ -30,10 +32,17 @@ class WidgetRenderTest {
         val ctx = paparazzi.context
         val density = ctx.resources.displayMetrics.density
         val frame = FrameLayout(ctx).apply { setBackgroundColor(0xFF3B5B7A.toInt()) }
-        val holder = FrameLayout(ctx)
+        // Simule l'arrondi appliqué par l'écran d'accueil (rayon 28dp, le pire cas courant).
+        val holder = FrameLayout(ctx).apply {
+            outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) =
+                    outline.setRoundRect(0, 0, view.width, view.height, 28 * density)
+            }
+            clipToOutline = true
+        }
         val pad = (16 * density).toInt()
         frame.setPadding(pad, pad, pad, pad)
-        val views = DaysWidgetProvider.buildViews(ctx, date, label, theme, today)
+        val views = DaysWidgetProvider.buildViews(ctx, date, label, theme, today, widthDp = wDp)
         holder.addView(views.apply(ctx, holder))
         frame.addView(holder, ViewGroup.LayoutParams((wDp * density).toInt(), (hDp * density).toInt()))
         return frame
@@ -59,4 +68,13 @@ class WidgetRenderTest {
 
     @Test fun classic_past() =
         paparazzi.snapshot(render(WidgetTheme.CLASSIC, LocalDate.of(2026, 6, 13), "Arrêt du tabac", 160, 160))
+
+    @Test fun milestones() {
+        org.junit.Assert.assertEquals(150L to 0.56f, DaysWidgetProvider.milestone(128, past = true))
+        org.junit.Assert.assertEquals(150L to 0f, DaysWidgetProvider.milestone(100, past = true))
+        org.junit.Assert.assertEquals(11000L, DaysWidgetProvider.milestone(10792, past = true).first)
+        org.junit.Assert.assertEquals(50L to 0.66f, DaysWidgetProvider.milestone(67, past = false))
+        org.junit.Assert.assertEquals(0L, DaysWidgetProvider.milestone(3, past = false).first)
+        org.junit.Assert.assertEquals(4000L, DaysWidgetProvider.milestone(4500, past = false).first)
+    }
 }
