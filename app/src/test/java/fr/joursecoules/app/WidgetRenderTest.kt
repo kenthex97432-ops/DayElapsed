@@ -99,6 +99,18 @@ class WidgetRenderTest {
     @Test fun pager_vectorheart_wide() =
         paparazzi.snapshot(widget(WidgetTheme.VECTORHEART, samples, 1, 260, 170))
 
+    @Test fun resize_vectorheart_large() =
+        paparazzi.snapshot(widget(WidgetTheme.VECTORHEART, samples, 0, 330, 330))
+
+    @Test fun resize_vectorheart_wide() =
+        paparazzi.snapshot(widget(WidgetTheme.VECTORHEART, samples, 1, 330, 170))
+
+    @Test fun resize_vectorheart_tall() =
+        paparazzi.snapshot(widget(WidgetTheme.VECTORHEART, samples, 2, 170, 330))
+
+    @Test fun resize_classic_large() =
+        paparazzi.snapshot(widget(WidgetTheme.CLASSIC, samples, 0, 330, 330))
+
     @Test fun pager_classic() =
         paparazzi.snapshot(widget(WidgetTheme.CLASSIC, samples, 2, 180, 170))
 
@@ -117,6 +129,13 @@ class WidgetRenderTest {
         val d = ctx.resources.displayMetrics.density
         frame.addView(root, ViewGroup.LayoutParams((392 * d).toInt(), (560 * d).toInt()))
         paparazzi.snapshot(frame)
+    }
+
+    @Test fun scale() {
+        assertEquals(1f, CardRenderer.scaleFor(0, 0))
+        assertEquals(1f, CardRenderer.scaleFor(160, 200))
+        assertEquals(2f, CardRenderer.scaleFor(320, 330))
+        assertEquals(0.85f, CardRenderer.scaleFor(90, 90))
     }
 
     @Test fun milestones() {

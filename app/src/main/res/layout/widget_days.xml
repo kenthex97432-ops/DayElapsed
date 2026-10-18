@@ -11,16 +11,18 @@
 
     <FrameLayout
         android:id="@+id/rail_prev"
-        android:layout_width="@dimen/rail_width"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:contentDescription="@string/arrow_prev"
         android:visibility="gone">
 
         <ImageView
+            android:id="@+id/rail_prev_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
+            android:paddingHorizontal="3dp"
             android:src="@drawable/classic_rail_prev" />
     </FrameLayout>
 
@@ -46,8 +48,9 @@
         <TextView
             android:id="@+id/days_number"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:autoSizeMaxTextSize="44sp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="300sp"
             android:autoSizeMinTextSize="18sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
@@ -94,16 +97,18 @@
 
     <FrameLayout
         android:id="@+id/rail_next"
-        android:layout_width="@dimen/rail_width"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:contentDescription="@string/arrow_next"
         android:visibility="gone">
 
         <ImageView
+            android:id="@+id/rail_next_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
+            android:paddingHorizontal="3dp"
             android:src="@drawable/classic_rail_next" />
     </FrameLayout>
 </LinearLayout>

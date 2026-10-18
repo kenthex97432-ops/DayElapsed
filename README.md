@@ -13,6 +13,8 @@ Widget Android qui affiche le nombre de jours écoulés depuis une date (ou rest
   - **Vectorheart** : esthétique graphique fin des années 90 / début 2000 — vecteurs plats, coins coupés à 45°, typo technique en capitales, bandes de signalisation, noir et jaune acide.
 - Toucher une carte rouvre l'écran de réglage sur cette date : ajouter, modifier, supprimer,
   mettre en premier, changer de thème — avec aperçu en direct.
+- Redimensionnable : le nombre remplit l'espace, textes, jauge et flèches grossissent avec le widget ;
+  en format haut et étroit (Vectorheart), le panneau de données passe sous le nombre.
 - Mise à jour automatique juste après minuit.
 - Android 8.0 minimum.
 

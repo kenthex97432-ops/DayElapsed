@@ -5,7 +5,5 @@
     <dimen name="vh_safe_inset">8dp</dimen>
     <dimen name="vh_gauge_width">44dp</dimen>
 
-    <!-- Rails de navigation intégrés à la carte (remplacent les marges intérieures) -->
-    <dimen name="rail_width">18dp</dimen>
     <dimen name="vh_gauge_height">6dp</dimen>
 </resources>

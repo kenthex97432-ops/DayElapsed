@@ -8,6 +8,7 @@ import android.graphics.Path
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import java.text.NumberFormat
@@ -48,19 +49,60 @@ object CardRenderer {
         total: Int = 1,
         heightDp: Int = 0
     ): RemoteViews = when (theme) {
-        WidgetTheme.CLASSIC -> buildClassic(context, counter, today, index, total)
+        WidgetTheme.CLASSIC -> buildClassic(context, counter, today, widthDp, heightDp, index, total)
         WidgetTheme.VECTORHEART -> buildVectorheart(context, counter, today, widthDp, heightDp, index, total)
     }
 
+    /** Taille de référence du dessin (dp) : au-delà, tout grossit ; en dessous, tout rétrécit un peu. */
+    private const val BASE_DP = 160f
+
+    /** Facteur d'échelle du texte selon la taille du widget (le plus petit côté compte). */
+    internal fun scaleFor(widthDp: Int, heightDp: Int): Float {
+        val sides = listOf(widthDp, heightDp).filter { it > 0 }
+        if (sides.isEmpty()) return 1f
+        return (sides.min() / BASE_DP).coerceIn(0.85f, 2.6f)
+    }
+
+    /** Icône vectorielle rendue à l'échelle voulue, affichée à sa taille réelle. */
+    private fun iconBitmap(context: Context, resId: Int, scale: Float): Bitmap {
+        val d = context.getDrawable(resId)!!
+        val w = (d.intrinsicWidth * scale).toInt().coerceAtLeast(1)
+        val h = (d.intrinsicHeight * scale).toInt().coerceAtLeast(1)
+        val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        d.setBounds(0, 0, w, h)
+        d.draw(Canvas(bmp))
+        bmp.density = context.resources.displayMetrics.densityDpi
+        return bmp
+    }
+
+    private fun textSp(views: RemoteViews, id: Int, sp: Float, scale: Float) =
+        views.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_SP, sp * scale)
+
     /**
-     * Plusieurs dates : affiche les rails de navigation, qui prennent la place
-     * des marges intérieures gauche et droite de la carte.
+     * Marges intérieures mises à l'échelle. Avec plusieurs dates, les rails de navigation
+     * prennent la place des marges gauche et droite.
      */
-    private fun showRails(context: Context, views: RemoteViews, bodyId: Int, topDp: Int, bottomDp: Int) {
-        val d = context.resources.displayMetrics.density
-        views.setViewVisibility(R.id.rail_prev, View.VISIBLE)
-        views.setViewVisibility(R.id.rail_next, View.VISIBLE)
-        views.setViewPadding(bodyId, 0, (topDp * d).toInt(), 0, (bottomDp * d).toInt())
+    private fun bodyPadding(
+        context: Context, views: RemoteViews, bodyId: Int,
+        startDp: Int, topDp: Int, endDp: Int, bottomDp: Int,
+        scale: Float, rails: Boolean
+    ) {
+        val d = context.resources.displayMetrics.density * scale
+        if (rails) {
+            views.setViewVisibility(R.id.rail_prev, View.VISIBLE)
+            views.setViewVisibility(R.id.rail_next, View.VISIBLE)
+        }
+        if (rails && scale != 1f) {
+            // Les chevrons grossissent avec le reste ; le rail s'élargit avec eux.
+            val vh = bodyId == R.id.card_body
+            views.setImageViewBitmap(R.id.rail_prev_icon, iconBitmap(context, if (vh) R.drawable.vh_rail_prev else R.drawable.classic_rail_prev, scale))
+            views.setImageViewBitmap(R.id.rail_next_icon, iconBitmap(context, if (vh) R.drawable.vh_rail_next else R.drawable.classic_rail_next, scale))
+        }
+        views.setViewPadding(
+            bodyId,
+            if (rails) 0 else (startDp * d).toInt(), (topDp * d).toInt(),
+            if (rails) 0 else (endDp * d).toInt(), (bottomDp * d).toInt()
+        )
     }
 
     private fun unitText(context: Context, days: Long, count: Long): String = when {
@@ -73,14 +115,22 @@ object CardRenderer {
         context: Context,
         counter: Counter?,
         today: LocalDate,
+        widthDp: Int,
+        heightDp: Int,
         index: Int,
         total: Int
     ): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.widget_days)
         val res = context.resources
 
+        val scale = scaleFor(widthDp, heightDp)
+        bodyPadding(context, views, R.id.widget_root, 12, 12, 12, 12, scale, rails = total > 1)
+        textSp(views, R.id.days_label, 13f, scale)
+        textSp(views, R.id.days_unit, 14f, scale)
+        textSp(views, R.id.days_since, 11f, scale)
+        textSp(views, R.id.days_page, 7f, scale)
+
         if (total > 1) {
-            showRails(context, views, R.id.widget_root, 12, 12)
             views.setViewVisibility(R.id.days_page, View.VISIBLE)
             views.setTextViewText(R.id.days_page, (0 until total).joinToString(" ") { if (it == index) "●" else "○" })
         } else {
@@ -124,15 +174,30 @@ object CardRenderer {
         index: Int,
         total: Int
     ): RemoteViews {
-        val views = RemoteViews(context.packageName, R.layout.widget_vectorheart)
+        // Widget nettement plus haut que large : le panneau passe sous le nombre.
+        val tall = widthDp > 0 && heightDp > widthDp * 1.35f
+        val views = RemoteViews(
+            context.packageName,
+            if (tall) R.layout.widget_vectorheart_tall else R.layout.widget_vectorheart
+        )
         val res = context.resources
 
         views.setTextViewText(
             R.id.vh_label,
             counter?.label.orEmpty().ifBlank { res.getString(R.string.vh_default_label) }.uppercase()
         )
+        val scale = scaleFor(widthDp, heightDp)
+        bodyPadding(context, views, R.id.card_body, 13, 11, 12, 10, scale, rails = total > 1)
+        textSp(views, R.id.vh_label, 10f, scale)
+        textSp(views, R.id.vh_page, 8f, scale)
+        textSp(views, R.id.vh_sign, 10f, scale)
+        textSp(views, R.id.vh_next, 8f, scale)
+        textSp(views, R.id.vh_weeks, 8f, scale)
+        textSp(views, R.id.vh_months, 8f, scale)
+        textSp(views, R.id.vh_years, 8f, scale)
+        textSp(views, R.id.days_since, 8f, scale)
+
         if (total > 1) {
-            showRails(context, views, R.id.card_body, 11, 10)
             views.setViewVisibility(R.id.vh_page, View.VISIBLE)
             views.setTextViewText(R.id.vh_page, "%02d/%02d".format(index + 1, total))
         } else {
@@ -148,9 +213,11 @@ object CardRenderer {
         views.setViewVisibility(R.id.vh_footer, if (compact) View.GONE else View.VISIBLE)
 
         if (counter == null) {
+            val unit = res.getString(R.string.widget_not_set).uppercase()
             views.setTextViewText(R.id.vh_sign, "T?")
             views.setTextViewText(R.id.days_number, "--")
-            views.setTextViewText(R.id.days_unit, res.getString(R.string.widget_not_set).uppercase())
+            views.setTextViewText(R.id.days_unit, unit)
+            vhUnitSize(context, views, unit, widthDp, scale, total > 1)
             views.setTextViewText(R.id.days_since, res.getString(R.string.widget_tap_to_setup).uppercase())
             return views
         }
@@ -163,7 +230,9 @@ object CardRenderer {
 
         views.setTextViewText(R.id.days_number, NumberFormat.getIntegerInstance().format(count))
         views.setTextViewText(R.id.vh_sign, if (past) "T+" else "T−")
-        views.setTextViewText(R.id.days_unit, unitText(context, days, count).uppercase())
+        val unit = unitText(context, days, count).uppercase()
+        views.setTextViewText(R.id.days_unit, unit)
+        vhUnitSize(context, views, unit, widthDp, scale, total > 1)
         views.setTextViewText(
             R.id.days_since,
             res.getString(if (past) R.string.vh_since else R.string.vh_until, dateText)
@@ -172,7 +241,7 @@ object CardRenderer {
         if (showPanel) {
             val (target, progress) = milestone(count, past)
             views.setTextViewText(R.id.vh_next, "→" + NumberFormat.getIntegerInstance().format(target))
-            views.setImageViewBitmap(R.id.vh_gauge, gaugeBitmap(context, progress))
+            views.setImageViewBitmap(R.id.vh_gauge, gaugeBitmap(context, progress, scale))
 
             val months = abs(ChronoUnit.MONTHS.between(date, today))
             val years = count / 365.25
@@ -186,6 +255,19 @@ object CardRenderer {
             views.setViewVisibility(R.id.vh_years, if (showYears) View.VISIBLE else View.GONE)
         }
         return views
+    }
+
+    /**
+     * Unité (« JOURS RESTANTS »…) : grossit avec le widget mais reste sur une ligne.
+     * Largeur estimée d'une capitale condensée grasse + interlettrage : ~0,66 em.
+     */
+    private fun vhUnitSize(context: Context, views: RemoteViews, text: String, widthDp: Int, scale: Float, rails: Boolean) {
+        val card = if (widthDp > 0) widthDp.toFloat() else BASE_DP
+        val sides = if (rails) 2 * 18f * scale else (13f + 12f) * scale
+        val available = card - 16f - sides - 16f   // marge anti-arrondi, côtés, barre d'accent
+        val fit = available / (text.length.coerceAtLeast(1) * 0.66f)
+        val size = minOf(12f * scale, fit).coerceAtLeast(7f)
+        views.setTextViewTextSize(R.id.days_unit, TypedValue.COMPLEX_UNIT_DIP, size)
     }
 
     /** Plus petit palier strictement au-dessus de n (au-delà de 3000 : tous les 1000). */
@@ -223,11 +305,13 @@ object CardRenderer {
     }
 
     /** Jauge en segments inclinés à 45°, dessinée à la densité de l'écran. */
-    private fun gaugeBitmap(context: Context, progress: Float): Bitmap {
+    private fun gaugeBitmap(context: Context, progress: Float, scale: Float): Bitmap {
         val res = context.resources
-        val w = res.getDimensionPixelSize(R.dimen.vh_gauge_width)
-        val h = res.getDimensionPixelSize(R.dimen.vh_gauge_height)
+        val w = (res.getDimension(R.dimen.vh_gauge_width) * scale).toInt()
+        val h = (res.getDimension(R.dimen.vh_gauge_height) * scale).toInt().coerceAtLeast(2)
         val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        // Affichée à sa taille réelle (ImageView en wrap_content).
+        bmp.density = res.displayMetrics.densityDpi
         val canvas = Canvas(bmp)
         val on = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = context.getColor(R.color.vh_accent) }
         val off = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = context.getColor(R.color.vh_line) }

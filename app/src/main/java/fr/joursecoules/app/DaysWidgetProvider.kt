@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.RemoteViews
 import java.time.LocalDate
@@ -77,17 +78,32 @@ class DaysWidgetProvider : AppWidgetProvider() {
         fun updateWidget(context: Context, manager: AppWidgetManager, widgetId: Int) {
             val counters = DaysStore.counters(context, widgetId)
             val index = DaysStore.currentIndex(context, widgetId).coerceIn(0, (counters.size - 1).coerceAtLeast(0))
-            val options = manager.getAppWidgetOptions(widgetId)
+            val (w, h) = sizeDp(context, manager.getAppWidgetOptions(widgetId))
             val views = buildWidget(
                 context,
                 counters,
                 DaysStore.theme(context, widgetId),
                 index,
-                options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0),
-                options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0),
+                w,
+                h,
                 widgetId
             )
             manager.updateAppWidget(widgetId, views)
+        }
+
+        /**
+         * Taille réelle du widget (dp). Android donne une largeur mini (portrait) et maxi (paysage),
+         * et l'inverse pour la hauteur.
+         */
+        fun sizeDp(context: Context, options: Bundle): Pair<Int, Int> {
+            val portrait = context.resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE
+            val w = options.getInt(
+                if (portrait) AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, 0
+            )
+            val h = options.getInt(
+                if (portrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0
+            )
+            return w to h
         }
 
         /**
