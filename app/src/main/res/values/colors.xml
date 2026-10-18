@@ -7,4 +7,9 @@
     <color name="widget_accent">#FFC266</color>
     <color name="widget_text">#FFFFFFFF</color>
     <color name="widget_text_secondary">#B3FFFFFF</color>
+
+    <!-- Thème Vectorheart : palette fixe, haut contraste -->
+    <color name="vh_accent">#D4FF00</color>
+    <color name="vh_text">#F4F4F0</color>
+    <color name="vh_text_dim">#8A8A92</color>
 </resources>

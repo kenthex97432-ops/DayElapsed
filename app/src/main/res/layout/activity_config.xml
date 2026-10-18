@@ -17,10 +17,46 @@
             android:text="@string/config_title"
             android:textSize="24sp" />
 
+        <!-- Aperçu en direct du widget -->
+        <FrameLayout
+            android:id="@+id/preview_container"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:text="@string/config_theme_title"
+            android:textSize="14sp" />
+
+        <RadioGroup
+            android:id="@+id/theme_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/theme_classic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/theme_classic" />
+
+            <RadioButton
+                android:id="@+id/theme_vectorheart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/theme_vectorheart" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="@string/config_label_title"
             android:textSize="14sp" />
 
@@ -37,7 +73,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:text="@string/config_date_title"
             android:textSize="14sp" />
 
@@ -49,20 +85,10 @@
             android:calendarViewShown="false"
             android:datePickerMode="spinner" />
 
-        <TextView
-            android:id="@+id/preview_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:textColor="@color/brand"
-            android:textSize="20sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:gravity="end"
             android:orientation="horizontal">
 

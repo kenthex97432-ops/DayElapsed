@@ -18,22 +18,21 @@
         <item quantity="other">jours restants</item>
     </plurals>
 
+    <!-- Thème Vectorheart -->
+    <string name="vh_default_label">Compteur</string>
+    <string name="vh_since">DEPUIS %1$s</string>
+    <string name="vh_until">JUSQU\'AU %1$s</string>
+
     <!-- Écran de réglage -->
     <string name="config_title">Choisir la date</string>
     <string name="config_label_title">Nom (facultatif)</string>
     <string name="config_label_hint">Ex. : Arrêt du tabac, Rencontre…</string>
     <string name="config_date_title">Date de départ</string>
+    <string name="config_theme_title">Thème</string>
+    <string name="theme_classic">Classique</string>
+    <string name="theme_vectorheart">Vectorheart</string>
     <string name="config_cancel">Annuler</string>
     <string name="config_save">Valider</string>
-    <string name="preview_today">C\'est aujourd\'hui</string>
-    <plurals name="preview_past">
-        <item quantity="one">%d jour écoulé</item>
-        <item quantity="other">%d jours écoulés</item>
-    </plurals>
-    <plurals name="preview_future">
-        <item quantity="one">Dans %d jour</item>
-        <item quantity="other">Dans %d jours</item>
-    </plurals>
 
     <!-- Écran principal -->
     <string name="main_title">Jours écoulés</string>

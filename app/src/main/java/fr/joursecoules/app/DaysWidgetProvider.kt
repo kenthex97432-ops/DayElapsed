@@ -43,6 +43,7 @@ class DaysWidgetProvider : AppWidgetProvider() {
 
     companion object {
         private const val ACTION_MIDNIGHT = "fr.joursecoules.app.ACTION_MIDNIGHT"
+        private val VH_DATE = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         fun updateAll(context: Context) {
             val manager = AppWidgetManager.getInstance(context)
@@ -52,45 +53,14 @@ class DaysWidgetProvider : AppWidgetProvider() {
         }
 
         fun updateWidget(context: Context, manager: AppWidgetManager, widgetId: Int) {
-            val views = RemoteViews(context.packageName, R.layout.widget_days)
-            val date = DaysStore.date(context, widgetId)
-            val label = DaysStore.label(context, widgetId)
-            val res = context.resources
+            val views = buildViews(
+                context,
+                DaysStore.date(context, widgetId),
+                DaysStore.label(context, widgetId),
+                DaysStore.theme(context, widgetId)
+            )
 
-            if (date == null) {
-                views.setViewVisibility(R.id.days_label, View.GONE)
-                views.setTextViewText(R.id.days_number, "?")
-                views.setTextViewText(R.id.days_unit, res.getString(R.string.widget_not_set))
-                views.setTextViewText(R.id.days_since, res.getString(R.string.widget_tap_to_setup))
-            } else {
-                val days = ChronoUnit.DAYS.between(date, LocalDate.now())
-                val count = abs(days)
-                val dateText = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
-
-                views.setTextViewText(R.id.days_number, NumberFormat.getIntegerInstance().format(count))
-                if (days >= 0) {
-                    views.setTextViewText(
-                        R.id.days_unit,
-                        res.getQuantityString(R.plurals.widget_unit_past, count.toInt())
-                    )
-                    views.setTextViewText(R.id.days_since, res.getString(R.string.widget_since, dateText))
-                } else {
-                    views.setTextViewText(
-                        R.id.days_unit,
-                        res.getQuantityString(R.plurals.widget_unit_future, count.toInt())
-                    )
-                    views.setTextViewText(R.id.days_since, res.getString(R.string.widget_until, dateText))
-                }
-
-                if (label.isBlank()) {
-                    views.setViewVisibility(R.id.days_label, View.GONE)
-                } else {
-                    views.setViewVisibility(R.id.days_label, View.VISIBLE)
-                    views.setTextViewText(R.id.days_label, label)
-                }
-            }
-
-            // Toucher le widget ouvre l'écran de réglage (changer la date / le nom).
+            // Toucher le widget ouvre l'écran de réglage (date, nom, thème).
             val configIntent = Intent(context, WidgetConfigActivity::class.java)
                 .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -103,6 +73,92 @@ class DaysWidgetProvider : AppWidgetProvider() {
             views.setOnClickPendingIntent(R.id.widget_root, pending)
 
             manager.updateAppWidget(widgetId, views)
+        }
+
+        /** Construit l'affichage du widget. Sert aussi pour l'aperçu de l'écran de réglage. */
+        fun buildViews(
+            context: Context,
+            date: LocalDate?,
+            label: String,
+            theme: WidgetTheme,
+            today: LocalDate = LocalDate.now()
+        ): RemoteViews = when (theme) {
+            WidgetTheme.CLASSIC -> buildClassic(context, date, label, today)
+            WidgetTheme.VECTORHEART -> buildVectorheart(context, date, label, today)
+        }
+
+        private fun buildClassic(context: Context, date: LocalDate?, label: String, today: LocalDate): RemoteViews {
+            val views = RemoteViews(context.packageName, R.layout.widget_days)
+            val res = context.resources
+
+            if (date == null) {
+                views.setViewVisibility(R.id.days_label, View.GONE)
+                views.setTextViewText(R.id.days_number, "?")
+                views.setTextViewText(R.id.days_unit, res.getString(R.string.widget_not_set))
+                views.setTextViewText(R.id.days_since, res.getString(R.string.widget_tap_to_setup))
+                return views
+            }
+
+            val days = ChronoUnit.DAYS.between(date, today)
+            val count = abs(days)
+            val dateText = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+
+            views.setTextViewText(R.id.days_number, NumberFormat.getIntegerInstance().format(count))
+            if (days >= 0) {
+                views.setTextViewText(R.id.days_unit, res.getQuantityString(R.plurals.widget_unit_past, count.toInt()))
+                views.setTextViewText(R.id.days_since, res.getString(R.string.widget_since, dateText))
+            } else {
+                views.setTextViewText(R.id.days_unit, res.getQuantityString(R.plurals.widget_unit_future, count.toInt()))
+                views.setTextViewText(R.id.days_since, res.getString(R.string.widget_until, dateText))
+            }
+
+            if (label.isBlank()) {
+                views.setViewVisibility(R.id.days_label, View.GONE)
+            } else {
+                views.setViewVisibility(R.id.days_label, View.VISIBLE)
+                views.setTextViewText(R.id.days_label, label)
+            }
+            return views
+        }
+
+        private fun buildVectorheart(context: Context, date: LocalDate?, label: String, today: LocalDate): RemoteViews {
+            val views = RemoteViews(context.packageName, R.layout.widget_vectorheart)
+            val res = context.resources
+
+            views.setTextViewText(
+                R.id.vh_label,
+                label.ifBlank { res.getString(R.string.vh_default_label) }.uppercase()
+            )
+
+            if (date == null) {
+                views.setTextViewText(R.id.vh_sign, "T?")
+                views.setTextViewText(R.id.days_number, "--")
+                views.setTextViewText(R.id.days_unit, res.getString(R.string.widget_not_set).uppercase())
+                views.setTextViewText(R.id.days_since, res.getString(R.string.widget_tap_to_setup).uppercase())
+                return views
+            }
+
+            val days = ChronoUnit.DAYS.between(date, today)
+            val count = abs(days)
+            val dateText = date.format(VH_DATE)
+
+            views.setTextViewText(R.id.days_number, NumberFormat.getIntegerInstance().format(count))
+            if (days >= 0) {
+                views.setTextViewText(R.id.vh_sign, "T+")
+                views.setTextViewText(
+                    R.id.days_unit,
+                    res.getQuantityString(R.plurals.widget_unit_past, count.toInt()).uppercase()
+                )
+                views.setTextViewText(R.id.days_since, res.getString(R.string.vh_since, dateText))
+            } else {
+                views.setTextViewText(R.id.vh_sign, "T−")
+                views.setTextViewText(
+                    R.id.days_unit,
+                    res.getQuantityString(R.plurals.widget_unit_future, count.toInt()).uppercase()
+                )
+                views.setTextViewText(R.id.days_since, res.getString(R.string.vh_until, dateText))
+            }
+            return views
         }
 
         /** Programme un rafraîchissement juste après minuit pour que le compteur change de jour. */
