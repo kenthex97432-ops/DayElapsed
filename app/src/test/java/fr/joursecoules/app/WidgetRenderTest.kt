@@ -4,9 +4,7 @@ import android.graphics.Outline
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
-import android.widget.BaseAdapter
 import android.widget.FrameLayout
-import android.widget.StackView
 import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import com.android.ide.common.rendering.api.SessionParams
@@ -63,21 +61,12 @@ class WidgetRenderTest {
         return homeFrame(holder, wDp, hDp)
     }
 
-    /** La pile de cartes, avec un adaptateur local à la place du service du widget. */
-    private fun stack(theme: WidgetTheme, wDp: Int, hDp: Int): View {
+    /** Le widget complet, avec les flèches quand il y a plusieurs dates. */
+    private fun widget(theme: WidgetTheme, counters: List<Counter>, index: Int, wDp: Int, hDp: Int): View {
         val ctx = paparazzi.context
-        val stack = StackView(ctx)
-        stack.adapter = object : BaseAdapter() {
-            override fun getCount() = samples.size
-            override fun getItem(position: Int) = samples[position]
-            override fun getItemId(position: Int) = position.toLong()
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
-                CardRenderer.build(
-                    ctx, samples[position], theme, today,
-                    (wDp * 0.75f).toInt(), position, samples.size, (hDp * 0.75f).toInt()
-                ).apply(ctx, parent)
-        }
-        return homeFrame(stack, wDp, hDp)
+        val holder = FrameLayout(ctx)
+        holder.addView(DaysWidgetProvider.buildWidget(ctx, counters, theme, index, wDp, hDp, today = today).apply(ctx, holder))
+        return homeFrame(holder, wDp, hDp)
     }
 
     @Test fun vectorheart_past() =
@@ -104,14 +93,17 @@ class WidgetRenderTest {
     @Test fun classic_future_paged() =
         paparazzi.snapshot(card(WidgetTheme.CLASSIC, samples[1], 160, 160, index = 1, total = 3))
 
-    @Test fun stack_vectorheart() =
-        paparazzi.snapshot(stack(WidgetTheme.VECTORHEART, 170, 170))
+    @Test fun pager_vectorheart() =
+        paparazzi.snapshot(widget(WidgetTheme.VECTORHEART, samples, 0, 180, 170))
 
-    @Test fun stack_vectorheart_tall() =
-        paparazzi.snapshot(stack(WidgetTheme.VECTORHEART, 200, 220))
+    @Test fun pager_vectorheart_wide() =
+        paparazzi.snapshot(widget(WidgetTheme.VECTORHEART, samples, 1, 260, 170))
 
-    @Test fun stack_classic() =
-        paparazzi.snapshot(stack(WidgetTheme.CLASSIC, 170, 170))
+    @Test fun pager_classic() =
+        paparazzi.snapshot(widget(WidgetTheme.CLASSIC, samples, 2, 180, 170))
+
+    @Test fun pager_single_date_no_arrows() =
+        paparazzi.snapshot(widget(WidgetTheme.VECTORHEART, samples.take(1), 0, 180, 170))
 
     /** L'écran de réglage, avec trois dates. */
     @Test fun config_screen() {

@@ -23,13 +23,15 @@
     <string name="vh_since">DEPUIS %1$s</string>
     <string name="vh_until">CIBLE %1$s</string>
 
+    <string name="arrow_prev">Date précédente</string>
+    <string name="arrow_next">Date suivante</string>
     <string name="unit_today">aujourd\'hui</string>
 
     <!-- Écran de réglage -->
     <string name="config_title">Réglages du widget</string>
     <string name="config_dates_title">Dates</string>
     <string name="config_dates_hint_single">Touche une carte pour la modifier. Ajoute d\'autres dates pour les faire défiler dans le widget.</string>
-    <string name="config_dates_hint_multi">Dans le widget, fais glisser la carte vers le haut ou le bas pour passer à la date suivante. Touche une carte ici pour la modifier.</string>
+    <string name="config_dates_hint_multi">Dans le widget, utilise les flèches à gauche et à droite pour passer d\'une date à l\'autre. Touche une carte ici pour la modifier.</string>
     <string name="config_add">Ajouter\nune date</string>
     <string name="config_need_one">Ajoute au moins une date.</string>
     <string name="edit_title">Date</string>
@@ -50,7 +52,7 @@
     <!-- Écran principal -->
     <string name="main_title">Jours écoulés</string>
     <string name="main_intro">Cette appli fonctionne avec un widget à poser sur ton écran d\'accueil.</string>
-    <string name="main_steps">1. Appuie longuement sur un espace vide de l\'écran d\'accueil.\n2. Choisis « Widgets », puis « Jours écoulés ».\n3. Place le widget, puis ajoute une ou plusieurs dates.\n\nUne date passée affiche les jours écoulés, une date future les jours restants. Avec plusieurs dates, fais glisser la carte vers le haut ou le bas pour passer de l\'une à l\'autre. Touche le widget pour le modifier.</string>
+    <string name="main_steps">1. Appuie longuement sur un espace vide de l\'écran d\'accueil.\n2. Choisis « Widgets », puis « Jours écoulés ».\n3. Place le widget, puis ajoute une ou plusieurs dates.\n\nUne date passée affiche les jours écoulés, une date future les jours restants. Avec plusieurs dates, utilise les flèches du widget pour passer de l\'une à l\'autre. Touche le widget pour le modifier.</string>
     <string name="main_add_widget">Ajouter le widget</string>
     <string name="pin_not_supported">Ton lanceur ne permet pas l\'ajout direct : passe par l\'écran d\'accueil (appui long → Widgets).</string>
 </resources>

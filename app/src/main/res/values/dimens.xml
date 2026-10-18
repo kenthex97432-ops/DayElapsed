@@ -4,5 +4,10 @@
          (rayon jusqu'à ~28dp). -->
     <dimen name="vh_safe_inset">8dp</dimen>
     <dimen name="vh_gauge_width">44dp</dimen>
+
+    <!-- Flèches de navigation entre les dates -->
+    <dimen name="arrow_column">20dp</dimen>
+    <dimen name="arrow_tab_width">17dp</dimen>
+    <dimen name="arrow_tab_height">42dp</dimen>
     <dimen name="vh_gauge_height">6dp</dimen>
 </resources>

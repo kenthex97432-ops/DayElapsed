@@ -55,6 +55,14 @@ object DaysStore {
         return listOf(Counter(oldDate, p.getString("label_$widgetId", "") ?: ""))
     }
 
+    /** Date actuellement affichée par le widget (navigation avec les flèches). */
+    fun currentIndex(context: Context, widgetId: Int): Int =
+        prefs(context).getInt("index_$widgetId", 0)
+
+    fun setCurrentIndex(context: Context, widgetId: Int, index: Int) {
+        prefs(context).edit().putInt("index_$widgetId", index).apply()
+    }
+
     fun theme(context: Context, widgetId: Int): WidgetTheme =
         WidgetTheme.fromKey(prefs(context).getString("theme_$widgetId", null))
 
@@ -62,6 +70,7 @@ object DaysStore {
         prefs(context).edit()
             .remove("counters_$widgetId")
             .remove("theme_$widgetId")
+            .remove("index_$widgetId")
             .remove("date_$widgetId")
             .remove("label_$widgetId")
             .apply()

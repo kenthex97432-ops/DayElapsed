@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plusieurs dates : la carte au centre, une flèche de chaque côté. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <!-- Toute la colonne est cliquable, pour viser facilement. -->
+    <FrameLayout
+        android:id="@+id/arrow_prev"
+        android:layout_width="@dimen/arrow_column"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/arrow_prev">
+
+        <ImageView
+            android:id="@+id/arrow_prev_icon"
+            android:layout_width="@dimen/arrow_tab_width"
+            android:layout_height="@dimen/arrow_tab_height"
+            android:layout_gravity="center"
+            android:background="@drawable/arrow_bg_classic"
+            android:importantForAccessibility="no"
+            android:scaleType="center"
+            android:src="@drawable/arrow_left_classic" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/card_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <FrameLayout
+        android:id="@+id/arrow_next"
+        android:layout_width="@dimen/arrow_column"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/arrow_next">
+
+        <ImageView
+            android:id="@+id/arrow_next_icon"
+            android:layout_width="@dimen/arrow_tab_width"
+            android:layout_height="@dimen/arrow_tab_height"
+            android:layout_gravity="center"
+            android:background="@drawable/arrow_bg_classic"
+            android:importantForAccessibility="no"
+            android:scaleType="center"
+            android:src="@drawable/arrow_right_classic" />
+    </FrameLayout>
+</LinearLayout>

@@ -22,14 +22,18 @@
 
     <TextView
         android:id="@+id/days_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:autoSizeMaxTextSize="44sp"
+        android:autoSizeMinTextSize="18sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
         android:fontFamily="sans-serif-medium"
+        android:gravity="center"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:text="128"
-        android:textColor="@color/widget_accent"
-        android:textSize="44sp" />
+        android:textColor="@color/widget_accent" />
 
     <TextView
         android:id="@+id/days_unit"
