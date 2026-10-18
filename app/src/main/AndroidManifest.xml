@@ -27,6 +27,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".CounterEditActivity"
+            android:exported="false"
+            android:label="@string/edit_title" />
+
+        <service
+            android:name=".CardStackService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <receiver
             android:name=".DaysWidgetProvider"
             android:exported="true"

@@ -47,6 +47,18 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/vh_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="monospace"
+                android:maxLines="1"
+                android:text="02/05"
+                android:textColor="@color/vh_text_dim"
+                android:textSize="8sp"
+                android:visibility="gone" />
+
+            <TextView
                 android:id="@+id/vh_sign"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -173,10 +185,16 @@
 
             <TextView
                 android:id="@+id/days_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="17dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="12sp"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeStepGranularity="0.5sp"
+                android:autoSizeTextType="uniform"
                 android:fontFamily="sans-serif-condensed"
-                android:letterSpacing="0.12"
+                android:gravity="center_vertical"
+                android:letterSpacing="0.1"
                 android:maxLines="1"
                 android:text="JOURS"
                 android:textColor="@color/vh_accent"

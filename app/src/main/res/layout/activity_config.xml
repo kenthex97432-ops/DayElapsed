@@ -8,34 +8,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
             android:fontFamily="sans-serif-medium"
             android:text="@string/config_title"
             android:textSize="24sp" />
 
-        <!-- Aperçu en direct du widget -->
-        <FrameLayout
-            android:id="@+id/preview_container"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/config_dates_title"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/dates_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="4dp"
+            android:alpha="0.7"
+            android:text="@string/config_dates_hint_single"
+            android:textSize="14sp" />
+
+        <!-- Les cartes, dans l'ordre où elles défilent dans le widget -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="20dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/cards_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
             android:layout_marginTop="24dp"
+            android:fontFamily="sans-serif-medium"
             android:text="@string/config_theme_title"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <RadioGroup
             android:id="@+id/theme_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
             android:orientation="horizontal">
 
             <RadioButton
@@ -53,42 +85,11 @@
                 android:text="@string/theme_vectorheart" />
         </RadioGroup>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/config_label_title"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/label_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/config_label_hint"
-            android:importantForAutofill="no"
-            android:inputType="textCapSentences"
-            android:maxLength="30"
-            android:maxLines="1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/config_date_title"
-            android:textSize="14sp" />
-
-        <DatePicker
-            android:id="@+id/date_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp"
             android:gravity="end"
             android:orientation="horizontal">
 

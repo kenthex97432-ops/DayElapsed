@@ -52,4 +52,16 @@
         android:textColor="@color/widget_text_secondary"
         android:textSize="11sp" />
 
+    <TextView
+        android:id="@+id/days_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:letterSpacing="0.1"
+        android:maxLines="1"
+        android:text="● ○ ○"
+        android:textColor="@color/widget_text_secondary"
+        android:textSize="7sp"
+        android:visibility="gone" />
+
 </LinearLayout>
