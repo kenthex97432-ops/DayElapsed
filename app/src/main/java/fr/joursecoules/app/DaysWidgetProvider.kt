@@ -15,7 +15,7 @@ import java.time.ZoneId
 /**
  * Widget « Jours écoulés ».
  * - Une seule date : la carte occupe tout le widget.
- * - Plusieurs dates : une flèche de chaque côté pour passer à la date précédente / suivante.
+ * - Plusieurs dates : des rails fléchés intégrés aux bords de la carte pour passer d'une date à l'autre.
  */
 class DaysWidgetProvider : AppWidgetProvider() {
 
@@ -103,44 +103,19 @@ class DaysWidgetProvider : AppWidgetProvider() {
             widgetId: Int? = null,
             today: LocalDate = LocalDate.now()
         ): RemoteViews {
-            val paged = counters.size > 1
-            val res = context.resources
-            val density = res.displayMetrics.density
-            val arrowsDp = if (paged) (2 * res.getDimension(R.dimen.arrow_column) / density).toInt() else 0
-            // Avec les flèches, les coins de la carte ne sont plus aux coins du widget :
-            // la marge latérale anti-arrondi devient inutile, on la rend à la carte.
-            val insetDp = (res.getDimension(R.dimen.vh_safe_inset) / density).toInt()
-            val reclaimed = if (paged && theme == WidgetTheme.VECTORHEART) 2 * insetDp else 0
-            val cardWidth = if (widthDp > 0) widthDp - arrowsDp + reclaimed else 0
-
             val card = CardRenderer.build(
                 context, counters.getOrNull(index), theme, today,
-                cardWidth, index, counters.size, heightDp
+                widthDp, index, counters.size, heightDp
             )
-            // Toucher la carte ouvre les réglages sur cette date.
-            widgetId?.let { card.setOnClickPendingIntent(R.id.widget_root, editIntent(context, it, index)) }
-            if (!paged) return card
-            if (theme == WidgetTheme.VECTORHEART) {
-                val inset = res.getDimensionPixelSize(R.dimen.vh_safe_inset)
-                card.setViewPadding(R.id.widget_root, 0, inset, 0, inset)
-            }
-
-            val pager = RemoteViews(context.packageName, R.layout.widget_pager)
-            pager.removeAllViews(R.id.card_container)
-            pager.addView(R.id.card_container, card)
-
-            val vh = theme == WidgetTheme.VECTORHEART
-            val bg = if (vh) R.drawable.arrow_bg_vh else R.drawable.arrow_bg_classic
-            pager.setImageViewResource(R.id.arrow_prev_icon, if (vh) R.drawable.arrow_left_vh else R.drawable.arrow_left_classic)
-            pager.setImageViewResource(R.id.arrow_next_icon, if (vh) R.drawable.arrow_right_vh else R.drawable.arrow_right_classic)
-            pager.setInt(R.id.arrow_prev_icon, "setBackgroundResource", bg)
-            pager.setInt(R.id.arrow_next_icon, "setBackgroundResource", bg)
-
             widgetId?.let {
-                pager.setOnClickPendingIntent(R.id.arrow_prev, navIntent(context, it, ACTION_PREV))
-                pager.setOnClickPendingIntent(R.id.arrow_next, navIntent(context, it, ACTION_NEXT))
+                // Toucher la carte ouvre les réglages sur cette date ; les rails changent de date.
+                card.setOnClickPendingIntent(R.id.widget_root, editIntent(context, it, index))
+                if (counters.size > 1) {
+                    card.setOnClickPendingIntent(R.id.rail_prev, navIntent(context, it, ACTION_PREV))
+                    card.setOnClickPendingIntent(R.id.rail_next, navIntent(context, it, ACTION_NEXT))
+                }
             }
-            return pager
+            return card
         }
 
         private fun navIntent(context: Context, widgetId: Int, action: String): PendingIntent {

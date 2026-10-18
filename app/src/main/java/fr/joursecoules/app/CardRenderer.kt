@@ -52,6 +52,17 @@ object CardRenderer {
         WidgetTheme.VECTORHEART -> buildVectorheart(context, counter, today, widthDp, heightDp, index, total)
     }
 
+    /**
+     * Plusieurs dates : affiche les rails de navigation, qui prennent la place
+     * des marges intérieures gauche et droite de la carte.
+     */
+    private fun showRails(context: Context, views: RemoteViews, bodyId: Int, topDp: Int, bottomDp: Int) {
+        val d = context.resources.displayMetrics.density
+        views.setViewVisibility(R.id.rail_prev, View.VISIBLE)
+        views.setViewVisibility(R.id.rail_next, View.VISIBLE)
+        views.setViewPadding(bodyId, 0, (topDp * d).toInt(), 0, (bottomDp * d).toInt())
+    }
+
     private fun unitText(context: Context, days: Long, count: Long): String = when {
         days == 0L -> context.getString(R.string.unit_today)
         days > 0 -> context.resources.getQuantityString(R.plurals.widget_unit_past, count.toInt())
@@ -69,6 +80,7 @@ object CardRenderer {
         val res = context.resources
 
         if (total > 1) {
+            showRails(context, views, R.id.widget_root, 12, 12)
             views.setViewVisibility(R.id.days_page, View.VISIBLE)
             views.setTextViewText(R.id.days_page, (0 until total).joinToString(" ") { if (it == index) "●" else "○" })
         } else {
@@ -120,6 +132,7 @@ object CardRenderer {
             counter?.label.orEmpty().ifBlank { res.getString(R.string.vh_default_label) }.uppercase()
         )
         if (total > 1) {
+            showRails(context, views, R.id.card_body, 11, 10)
             views.setViewVisibility(R.id.vh_page, View.VISIBLE)
             views.setTextViewText(R.id.vh_page, "%02d/%02d".format(index + 1, total))
         } else {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rail de navigation Vectorheart : repères techniques + chevron. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="12dp"
+    android:height="44dp"
+    android:viewportWidth="12"
+    android:viewportHeight="44">
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M6,1 L6,11 M6,33 L6,43"
+        android:strokeColor="@color/vh_line"
+        android:strokeWidth="1" />
+    <path
+        android:fillColor="@color/vh_line"
+        android:pathData="M4.5,13 h3 v1.5 h-3 Z M4.5,29.5 h3 v1.5 h-3 Z" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M8.5,17.5 L4,22 L8.5,26.5"
+        android:strokeColor="@color/vh_accent"
+        android:strokeLineCap="square"
+        android:strokeLineJoin="miter"
+        android:strokeWidth="2.2" />
+</vector>

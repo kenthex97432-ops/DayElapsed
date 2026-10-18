@@ -12,8 +12,8 @@ android {
         applicationId = "fr.joursecoules.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.4"
+        versionCode = 6
+        versionName = "1.5"
     }
 
     // Clé de signature fixe, versionnée avec le projet : chaque APK compilé

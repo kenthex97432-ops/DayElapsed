@@ -4,8 +4,8 @@ Widget Android qui affiche le nombre de jours écoulés depuis une date (ou rest
 
 ![Widget Vectorheart avec flèches](app/src/test/snapshots/images/fr.joursecoules.app_WidgetRenderTest_pager_vectorheart_wide.png)
 
-- Plusieurs dates par widget : une flèche de chaque côté pour passer à la précédente / suivante
-  (en boucle), avec un indicateur de position (« 02/05 » ou points).
+- Plusieurs dates par widget : des rails fléchés intégrés aux bords de la carte pour passer
+  à la précédente / suivante (en boucle), avec un indicateur de position (« 02/05 » ou points).
 - Date passée : jours écoulés. Date future : compte à rebours (jours restants), « aujourd'hui » le jour J.
 - Chaque widget a ses propres dates et son thème ; on peut en poser plusieurs.
 - Deux thèmes :
